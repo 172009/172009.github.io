@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Personal Profile</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    /* Import should be at the very top */
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap');
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    /* NUCLEAR SCROLLBAR HIDE - Add this */
+    * {
+      scrollbar-width: none !important;
+      -ms-overflow-style: none !important;
+    }
+
+    *::-webkit-scrollbar {
+      display: none !important;
+      width: 0 !important;
+      height: 0 !important;
+      background: transparent !important;
+    }
+
+    html, body {
+      scrollbar-width: none !important;
+      -ms-overflow-style: none !important;
+    }
+
+    html::-webkit-scrollbar,
+    body::-webkit-scrollbar {
+      display: none !important;
+      width: 0 !important;
+      height: 0 !important;
+    }
+
+    body {
+      color: #333;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 0;
+      position: relative;
+      overflow-x: hidden;
+      overflow-y: auto;
+    }
+
+    /* Video Background */
+    #video-background {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      z-index: -2;
+    }
+
+    /* Overlay to improve readability */
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.4);
+      z-index: -1;
+    }
+
+    header {
+      width: 100%;
+      backdrop-filter: blur(10px);
+      background: rgba(255, 255, 255, 0.8);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 16px 5%;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+    }
+
+    .logo {
+  font-family: 'Inter', sans-serif;
+  font-weight: 700;
+  font-size: 1.8rem;
+  letter-spacing: 1px;
+  background: linear-gradient(135deg, #00ffff 0%, #ff00ff 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-shadow: 0 0 10px rgba(255, 0, 255, 0.3);
+}
+
+    nav a {
+      color: rgba(74, 85, 104, 0.9);
+      text-decoration: none;
+      margin-left: 24px;
+      font-size: 0.95rem;
+      transition: color 0.3s ease;
+      position: relative;
+    }
+
+    nav a:hover {
+      color: #5a67d8;
+    }
+
+    nav a::after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 2px;
+      bottom: -5px;
+      left: 0;
+      background-color: #5a67d8;
+      transition: width 0.3s ease;
+    }
+
+    nav a:hover::after {
+      width: 100%;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1000px;
+      background: rgba(255, 255, 255, 0.85);
+      border-radius: 20px;
+      padding: 40px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 30px;
+      margin: 40px 20px;
+      backdrop-filter: blur(5px);
+      border: 1px solid rgba(255, 255, 255, 0.5);
+      animation: fadeIn 1s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .profile {
+      background: white;
+      border-radius: 16px;
+      padding: 25px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 16px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+      transition: transform 0.3s ease;
+    }
+
+    .profile:hover {
+      transform: translateY(-5px);
+    }
+
+    .avatar {
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      font-size: 2.5rem;
+      color: white;
+      box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    }
+
+    .avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    h1 {
+      margin: 10px 0 0;
+      font-size: 1.6rem;
+      color: #2d3748;
+    }
+
+    .role {
+      margin: 0;
+      color: #718096;
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+
+    .stats {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 10px;
+      width: 100%;
+    }
+
+    .stat {
+      background: rgba(102, 126, 234, 0.1);
+      padding: 8px 12px;
+      border-radius: 10px;
+      font-size: 0.8rem;
+      color: #5a67d8;
+      font-weight: 500;
+    }
+
+    .main {
+      padding: 20px;
+      background: white;
+      border-radius: 16px;
+      box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+    }
+
+    .bio {
+      margin: 0 0 20px;
+      color: #4a5568;
+      line-height: 1.7;
+      font-size: 1.05rem;
+      text-align: center;
+      padding: 20px;
+      background: rgba(245, 247, 250, 0.7);
+      border-radius: 12px;
+      border-left: 4px solid #667eea;
+      white-space: pre-line;
+    }
+
+    .social-profiles {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-top: 25px;
+    }
+
+    .profile-card {
+      padding: 20px;
+      border-radius: 12px;
+      background: rgba(245, 247, 250, 0.8);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 15px;
+      transition: transform 0.3s ease;
+      border: 1px solid rgba(226, 232, 240, 0.8);
+      text-decoration: none;
+      color: inherit;
+    }
+
+    .profile-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .profile-card.facebook {
+      border-top: 4px solid #3b5998;
+    }
+
+    .profile-card.github {
+      border-top: 4px solid #333;
+    }
+
+    .profile-icon {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.8rem;
+      color: white;
+    }
+
+    .facebook .profile-icon {
+      background: #3b5998;
+    }
+
+    .github .profile-icon {
+      background: #333;
+    }
+
+    .profile-info {
+      text-align: center;
+    }
+
+    .profile-name {
+      font-weight: 600;
+      color: #2d3748;
+      margin-bottom: 5px;
+    }
+
+    .profile-handle {
+      color: #718096;
+      font-size: 0.9rem;
+    }
+
+    .profile-stats {
+      display: flex;
+      gap: 15px;
+      margin-top: 10px;
+    }
+
+    .profile-stat {
+      text-align: center;
+    }
+
+    .stat-value {
+      font-weight: 600;
+      color: #2d3748;
+      font-size: 1.1rem;
+    }
+
+    .stat-label {
+      color: #718096;
+      font-size: 0.8rem;
+    }
+
+    .view-profile {
+      margin-top: 10px;
+      padding: 8px 16px;
+      background: rgba(102, 126, 234, 0.1);
+      color: #5a67d8;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      transition: all 0.3s ease;
+    }
+
+    .profile-card:hover .view-profile {
+      background: #5a67d8;
+      color: white;
+    }
+
+    footer {
+      margin-top: 25px;
+      color: #718096;
+      font-size: 0.85rem;
+      text-align: center;
+      width: 100%;
+    }
+
+    .social-links {
+      display: flex;
+      gap: 15px;
+      margin-top: 20px;
+      justify-content: center;
+    }
+
+    .social-links a {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: rgba(102, 126, 234, 0.1);
+      color: #5a67d8;
+      transition: all 0.3s ease;
+    }
+
+    .social-links a:hover {
+      background: #5a67d8;
+      color: white;
+      transform: translateY(-3px);
+    }
+
+    @media (max-width: 768px) {
+      .container {
+        grid-template-columns: 1fr;
+        max-width: 100%;
+        padding: 25px;
+        margin: 20px 15px;
+      }
+      
+      .profile {
+        flex-direction: row;
+        text-align: left;
+      }
+      
+      .avatar {
+        width: 100px;
+        height: 100px;
+        font-size: 1.8rem;
+      }
+      
+      .stats {
+        display: none;
+      }
+      
+      header {
+        padding: 12px 5%;
+      }
+      
+      nav a {
+        margin-left: 15px;
+        font-size: 0.9rem;
+      }
+      
+      .social-profiles {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <video id="video-background" autoplay muted loop playsinline>
+   <source src="video.mp4" type="video/mp4">
+      Your browser does not support the video tag.
+  </video>
+  <div class="overlay"></div>
+
+  <header>
+    <div class="logo">ReversedSpace.dic</div>
+    <nav>
+      <a href="#"><i class="fas fa-home"></i> Home</a>
+      <a href="#"><i class="fas fa-user"></i> About</a>
+    </nav>
+  </header>
+
+  <main class="container">
+    <aside class="profile">
+      <div class="avatar" id="avatar">
+        <img id="avatarImg" src="" alt="Profile Avatar">
+      </div>
+      <div>
+        <h1 id="fullname">フォーティ セブン (ryuu)</h1>
+        <p class="role" id="role">TOP NEP Member</p>
+        <div class="stats">
+          <div class="stat" id="location">VN</div>
+          <div class="stat" id="year">2023</div>
+        </div>
+        <div class="social-links">
+          <a href="https://www.facebook.com/profile.php?id=100087153708141" target="_blank" id="facebookLink"><i class="fab fa-facebook-f"></i></a>
+          <a href="https://github.com/172009" target="_blank" id="githubLink"><i class="fab fa-github"></i></a>
+        </div>
+      </div>
+    </aside>
+
+    <section class="main">
+      <p class="bio" id="bio">
+        "I'm a member of TOP NEP, ReversedEngine and Deserver is my best job. 
+        An non-slave of git builder and slave-less coders. 
+
+        Procurez-vous un fauteuil roulant ou je vous en procurerai un."
+      </p>
+
+      <div class="social-profiles">
+        <a href="https://www.facebook.com/profile.php?id=100087153708141" target="_blank" class="profile-card facebook">
+          <div class="profile-icon">
+            <i class="fab fa-facebook-f"></i>
+          </div>
+          <div class="profile-info">
+            <div class="profile-name" id="facebookName">フォーティ セブン (ryuu)</div>
+            <div class="profile-handle">Facebook Profile</div>
+          </div>
+          <div class="view-profile">View Profile</div>
+        </a>
+
+        <a href="https://github.com/172009" target="_blank" class="profile-card github">
+          <div class="profile-icon">
+            <i class="fab fa-github"></i>
+          </div>
+          <div class="profile-info">
+            <div class="profile-name" id="githubName">172009</div>
+            <div class="profile-handle">github.com/172009</div>
+            <div class="profile-stats">
+              <div class="profile-stat">
+                <div class="stat-value" id="ghRepos">0</div>
+                <div class="stat-label">Repos</div>
+              </div>
+              <div class="profile-stat">
+                <div class="stat-value" id="ghFollowers">0</div>
+                <div class="stat-label">Followers</div>
+              </div>
+              <div class="profile-stat">
+                <div class="stat-value" id="ghFollowing">0</div>
+                <div class="stat-label">Following</div>
+              </div>
+            </div>
+          </div>
+          <div class="view-profile">View Profile</div>
+        </a>
+      </div>
+
+      <footer>
+        在創世之詩中…如果 ███ 不看我，不把我的名字寫在那本書裡…或許 █████ 就能安息了。
+      </footer>
+    </section>
+  </main>
+
+  <script>
+    // Configuration
+    const config = {
+      fullName: 'フォーティ セブン (ryuu)',
+      role: 'TOP NEP Member',
+      bio: `"I'm a member of TOP NEP, ReversedEngine and Deserver is my best job. \nAn non-slave of git builder and slave-less coders.\n\nProcurez-vous un fauteuil roulant ou je vous en procurerai un."`,
+      location: 'VN',
+      year: '2023',
+      facebookId: '100087153708141',
+      githubUsername: '172009'
+    };
+
+    // Set basic profile information
+    document.getElementById('fullname').textContent = config.fullName;
+    document.getElementById('role').textContent = config.role;
+    document.getElementById('bio').textContent = config.bio;
+    document.getElementById('location').textContent = config.location;
+    document.getElementById('year').textContent = config.year;
+
+    // Set social links
+    document.getElementById('facebookLink').href = `https://www.facebook.com/profile.php?id=${config.facebookId}`;
+    document.getElementById('githubLink').href = `https://github.com/${config.githubUsername}`;
+
+    // Fetch GitHub data
+    if (config.githubUsername) {
+      fetch(`https://api.github.com/users/${config.githubUsername}`)
+        .then(response => {
+          if (!response.ok) {
+            throw new Error('GitHub user not found');
+          }
+          return response.json();
+        })
+        .then(data => {
+          // Set GitHub profile information
+          document.getElementById('githubName').textContent = data.name || data.login;
+          document.getElementById('ghRepos').textContent = data.public_repos;
+          document.getElementById('ghFollowers').textContent = data.followers;
+          document.getElementById('ghFollowing').textContent = data.following;
+          
+          // Set avatar from GitHub
+          const avatarImg = document.getElementById('avatarImg');
+          avatarImg.src = data.avatar_url;
+          avatarImg.alt = `${data.name || data.login}'s avatar`;
+          
+          // Remove the gradient background when we have an image
+          document.getElementById('avatar').style.background = 'none';
+          
+          // Also set the Facebook profile name to match GitHub if available
+          if (data.name) {
+            document.getElementById('facebookName').textContent = data.name;
+          }
+        })
+        .catch(error => {
+          console.error('Error fetching GitHub data:', error);
+          // Fallback values if GitHub API fails
+          document.getElementById('githubName').textContent = config.githubUsername;
+          document.getElementById('ghRepos').textContent = '?';
+          document.getElementById('ghFollowers').textContent = '?';
+          document.getElementById('ghFollowing').textContent = '?';
+        });
+    }
+  </script>
+</body>
+</html>
